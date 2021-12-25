@@ -62,41 +62,59 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
             email = email_field.getText().toString();
 
-                Random random = new Random();
 
-                int temp_code = random.nextInt(8999) + 1000;
+            auth.fetchSignInMethodsForEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
 
-                code = Integer.toString(temp_code);
+                            boolean isNewUser = task.getResult().getSignInMethods().isEmpty();
 
-                String message_to_send = "Your otp is " + code;
-                Properties props = new Properties();
-                props.put("mail.smtp.auth", "true");
-                props.put("mail.smtp.starttls.enable", "true");
-                props.put("mail.smtp.host", "smtp.gmail.com");
-                props.put("mail.smtp.port", "587");
+                            if (isNewUser) {
+                                Log.e("TAG", "Is New User!");
+                                Random random = new Random();
 
-                Session session = Session.getInstance(props,
-                        new Authenticator() {
-                            @Override
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                return new PasswordAuthentication(from_email, from_email_password);
+                                int temp_code = random.nextInt(8999) + 1000;
+
+                                code = Integer.toString(temp_code);
+
+                                String message_to_send = "Your otp is " + code;
+                                Properties props = new Properties();
+                                props.put("mail.smtp.auth", "true");
+                                props.put("mail.smtp.starttls.enable", "true");
+                                props.put("mail.smtp.host", "smtp.gmail.com");
+                                props.put("mail.smtp.port", "587");
+
+                                Session session = Session.getInstance(props,
+                                        new Authenticator() {
+                                            @Override
+                                            protected PasswordAuthentication getPasswordAuthentication() {
+                                                return new PasswordAuthentication(from_email, from_email_password);
+                                            }
+                                        });
+                                try {
+                                    Message message = new MimeMessage(session);
+                                    message.setFrom(new InternetAddress(from_email));
+                                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(email_field.getText().toString()));
+                                    message.setSubject("OTP VERIFICATION");
+                                    message.setText(message_to_send);
+                                    Transport.send(message);
+                                    Toast.makeText(getApplicationContext(), "Email sent", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(Register.this, OTPverification.class);
+                                    i.putExtra("email", email);
+                                    i.putExtra("code", code);
+                                    startActivity(i);
+                                } catch (MessagingException e) {
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Log.e("TAG", "Is Old User!");
+                                Toast.makeText(getApplicationContext(),"User Already available please sign in",Toast.LENGTH_LONG).show();
                             }
-                        });
-                try {
-                    Message message = new MimeMessage(session);
-                    message.setFrom(new InternetAddress(from_email));
-                    message.setRecipient(Message.RecipientType.TO, new InternetAddress(email_field.getText().toString()));
-                    message.setSubject("OTP VERIFICATION");
-                    message.setText(message_to_send);
-                    Transport.send(message);
-                    Toast.makeText(getApplicationContext(), "Email sent", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(Register.this, OTPverification.class);
-                    i.putExtra("email", email);
-                    i.putExtra("code", code);
-                    startActivity(i);
-                } catch (MessagingException e) {
-                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                }
+
+                        }
+                    });
+
             }
         });
         if (android.os.Build.VERSION.SDK_INT > 9)
@@ -107,6 +125,7 @@ public class Register extends AppCompatActivity {
 
 
     }
+
 
 
 }
