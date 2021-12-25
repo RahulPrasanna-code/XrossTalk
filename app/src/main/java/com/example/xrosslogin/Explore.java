@@ -29,7 +29,6 @@ public class Explore extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         welcome_message = (TextView) findViewById(R.id.welcomemsg);
 
