@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "302279882109",
+    "project_id": "xroogin",
+    "storage_bucket": "xroogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302279882109:android:76b190572986186b65c814",
+        "android_client_info": {
+          "package_name": "com.example.xrosslogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302279882109-4tvm4vsgp7jho3madvg7bukbo5ddjhf4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsPiiPjhm0zWPqs52at8_NM3quvhudCwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302279882109-4tvm4vsgp7jho3madvg7bukbo5ddjhf4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
